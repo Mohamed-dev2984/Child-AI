@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مشروع الـ AI الآمن للأطفال 🤖 بنظام شات Gemini</title>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1a1a24;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            max-width: 500px;
+            margin: 20px auto;
+            background: #232334;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0px 6px 15px rgba(0,0,0,0.4);
+        }
+        h2 {
+            color: #ff557f;
+            margin-bottom: 20px;
+        }
+        input {
+            width: 90%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 2px solid #3b3b4f;
+            border-radius: 6px;
+            background-color: #1a1a24;
+            color: white;
+            font-size: 16px;
+        }
+        input:focus {
+            outline: none;
+            border-color: #ff557f;
+        }
+        button {
+            width: 95%;
+            padding: 12px;
+            background-color: #ff557f;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+        button:active {
+            background-color: #e0446c;
+            transform: scale(0.98);
+        }
+        #response-box {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #12121a;
+            border-radius: 6px;
+            border-left: 4px solid #ff557f;
+            text-align: right;
+            min-height: 100px;
+            max-height: 400px; /* سكرول تلقائي لو الشات طول */
+            overflow-y: auto;
+            line-height: 1.6;
+            white-space: pre-line;
+        }
+        .chat-line {
+            margin-bottom: 12px;
+            padding: 8px;
+            border-radius: 4px;
+        }
+        .user-msg {
+            background-color: #2b2b3d;
+        }
+        .ai-msg {
+            background-color: #1f1f2e;
+            border-right: 3px solid #ff557f;
+            padding-right: 8px;
+        }
+        .loading {
+            color: #ffb86c;
+            font-style: italic;
+            display: block;
+            margin-top: 10px;
+        }
+        hr {
+            border: 0;
+            height: 1px;
+            background: #3b3b4f;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>الـ AI الذكي (Gemini Child Mode) 🤖💎</h2>
+    
+    <input type="text" id="userInput" placeholder="اكتب سؤالك السري هنا يا بطل...">
+    
+    <button onclick="sendToAI()">إرسال الأمر لـ Gemini ⚡</button>
+    
+    <div id="response-box">مستني سؤالك.. الشات هيظهر هنا ورا بعضه! 👀<br></div>
+</div>
+
+<script>
+function sendToAI() {
+    const inputElement = document.getElementById("userInput");
+    const responseBox = document.getElementById("response-box");
+    const userMessage = inputElement.value.trim();
+
+    // التأكد إن محمد مكنش مستعجل وساب المربع فاضي 😉
+    if (userMessage === "") {
+        responseBox.innerHTML += "<div style='color: #ff5555;'><br>❌ اكتب سؤالك الأول يا بطل عشان الـ AI يرد عليك!</div>";
+        return;
+    }
+
+    // 🔑 حط مفتاح الـ API بتاع Google AI Studio هنا جوه علامات التنصيص وحافظ عليه سري!
+    const apiKey = "AQ.Ab8RN6IIOPuabvTQhv-ph5U-PMNmxvs70G5zr-5LrvtHjs_Y3w"; 
+    
+    // رابط استدعاء موديل Gemini 1.5 Flash السريع
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+
+    // عمل ID عشوائي لكلمة جاري التفكير عشان نمسحها لما الإجابة تنزل
+    const loadingId = "loading-" + Date.now();
+    responseBox.innerHTML += `<div id="${loadingId}" class="loading">جاري التفكير والتحليل عبر جوجل... 🧠💬</div>`;
+    
+    // سكرول تلقائي لتحت عشان يتابع آخر التطورات
+    responseBox.scrollTop = responseBox.scrollHeight;
+
+    // نبعت الطلب لجوجل بالـ Fetch المتين
+    fetch(url, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            "system_instruction": {
+                "parts": [{ "text": "أنت مساعد ذكي ومرح مخصص للأطفال (Child Mode)، تتحدث باللهجة المصرية البسيطة والمفهومة جداً. يجب أن تكون جميع إجاباتك آمنة تماماً للأطفال بنسبة 100%، وخالية تماماً من أي مواضيع عنيفة، مخيفة، أو غير مناسبة للصغار. إذا سألك الطفل عن شيء غير آمن، وجهه بلطف وبطريقة تربوية وممتعة لموضوع آخر مفيد. استخدم الكثير من الرموز التعبيرية 🌟 شجع الطفل دائماً بكلمات مثل (يا بطل، يا ذكي) واجعل التعلم ممتعاً وسهلاً!" }]
+            },
+            "contents": [{
+                "parts": [{ "text": userMessage }]
+            }]
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("في مشكلة في مفتاح جوجل أو الاتصال!");
+        }
+        return response.json();
+    })
+    .then(data => {
+        // نمسح كلمة "جاري التفكير" للطلب الحالي
+        const loadingElement = document.getElementById(loadingId);
+        if (loadingElement) loadingElement.remove();
+
+        // استخراج نص الإجابة من التركيبة الخاصة بجوجل
+        const aiResponse = data.candidates[0].content.parts[0].text;
+        
+        // نزود السؤال والإجابة في صندوق الشات بالـ `+=` المحترفة 🎯
+        responseBox.innerHTML += `
+            <div class="chat-line user-msg"><b>👤 أنت:</b> ${userMessage}</div>
+            <div class="chat-line ai-msg"><b>🤖 الـ AI:</b> ${aiResponse}</div>
+            <hr>
+        `;
+        
+        // نفضي مربع الكتابة عشان تستعد للسؤال اللي بعده
+        inputElement.value = "";
+        
+        // نزول تلقائي لآخر الشات
+        responseBox.scrollTop = responseBox.scrollHeight;
+    })
+    .catch(error => {
+        console.error("الخطأ التقني لجوجل:", error);
+        const loadingElement = document.getElementById(loadingId);
+        if (loadingElement) loadingElement.remove();
+        responseBox.innerHTML += "<p><br>Error:</br>حصل غلط حاول مرة اخرى</p>"
+    });
+}
+</script>
+
+</body>
+</html>
